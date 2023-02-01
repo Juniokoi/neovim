@@ -1,4 +1,5 @@
-local colors = { bg       = '#202328',
+local colors = {
+  bg       = '#202328',
   fg       = '#bbc2cf',
   yellow   = '#ECBE7B',
   cyan     = '#008080',
@@ -10,6 +11,20 @@ local colors = { bg       = '#202328',
   blue     = '#51afef',
   red      = '#ec5f67',
 }
+
+  local function lsp_colors()
+    local buf_ft = vim.api.nvim_buf_get_option(0, 'filetype')
+    local clients = vim.lsp.get_active_clients()
+    if next(clients) == nil then
+      return { fg = colors.red, gui = 'bold' }
+    end
+    for _, client in ipairs(clients) do
+      local filetypes = client.config.filetypes
+      if filetypes and vim.fn.index(filetypes, buf_ft) ~= -1 then
+        return { fg = colors.cyan, gui = 'bold' }
+      end
+    end
+  end
 
 local conditions = {
   buffer_not_empty = function()
@@ -52,7 +67,7 @@ local config = {
     },
     tabline = {
     },
-    extensions = { 'nvim-tree', 'toggleterm' },
+    extensions = { 'neo-tree', 'toggleterm' },
 }
 
 local function mode_colors()
@@ -109,18 +124,24 @@ ins_left {
 }
 
 ins_left {
-  -- filesize component
-  'filesize',
-  cond = conditions.buffer_not_empty,
+  'filetype',
+  colored = true,
+  icon_only = true,
+  icon = { align = 'left' },
+  padding = {left = 2, right = 0 },
 }
 
 ins_left {
   'filename',
-  cond = conditions.buffer_not_empty,
   color = { fg = colors.magenta, gui = 'bold' },
+  cond = conditions.buffer_not_empty,
 }
 
-ins_left { 'location' }
+ins_left {
+  -- filesize component
+  'filesize',
+  cond = conditions.buffer_not_empty,
+}
 
 ins_left { 'progress', color = { fg = colors.fg, gui = 'bold' } }
 
@@ -143,11 +164,13 @@ ins_left {
   end,
 }
 
+-- LSP module
+-- If LSP isn't active gear goes redish, otherwise, goes greenish
 
-ins_left {
+ins_right {
   function() return require("noice").api.status.mode.get() end,
   cond = function() return package.loaded["noice"] and require("noice").api.status.mode.has() end,
-  color = { fg = colors.blue, gui = 'bold' },
+  color = { fg = mode_colors(), gui = 'bold' },
 }
 
 -- Add components to right sections
@@ -160,15 +183,19 @@ ins_right {
 
 ins_right {
   'o:encoding', -- option component same as &encoding in viml
-  fmt = string.upper, -- I'm not sure why it's upper case either ;)
+  fmt = string.lower, -- I'm not sure why it's upper case either ;)
   cond = conditions.hide_in_width,
   color = { fg = colors.green, gui = 'bold' },
 }
 
 ins_right {
   'fileformat',
-  fmt = string.upper,
-  icons_enabled = false, -- I think icons are cool but Eviline doesn't have them. sigh
+  symbols = {
+    unix = '', -- e712
+    dos = '',  -- e70f
+    mac = '',  -- e711
+  },
+  icons_enabled = true, -- I think icons are cool but Eviline doesn't have them. sigh
   color = { fg = colors.green, gui = 'bold' },
 }
 
@@ -197,10 +224,16 @@ ins_right {
 }
 
 ins_right {
+  function() return '' end,
+  color = lsp_colors
+}
+
+ins_right {
   function()
     return '▊'
   end,
   color = mode_colors,
   padding = { left = 1 },
 }
-return config
+
+require("lualine").setup(config)

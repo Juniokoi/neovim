@@ -64,7 +64,7 @@ dashboard.section.buttons.val = {
     button("w", " Find by text", leader, ":Telescope live_grep<CR>"),
     button("c", " Config", leader, ":e $VIMRC <cr>"),
     button("h", " Help", leader, ":Telescope help_tags<CR>"),
-    button("s", " Sessions", leader, [[:lua require("persistence").load() <cr>]]),
+    button("s", " Sessions", leader, [[:Autosession search<cr>]]),
     button("q", " Quit", leader, ":qa<CR>"),
 }
 dashboard.section.buttons.opts.hl = "String"

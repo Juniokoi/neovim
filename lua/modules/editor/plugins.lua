@@ -1,51 +1,80 @@
-local config = { require'modules.editor.config' }
+local load = require('modules.editor.config')
 
 return {
-	-- Autopairs
-	{ "karb94/neoscroll.nvim", config = config.neoscroll },
-	{ "windwp/nvim-autopairs", config = config.npairs }, -- Autopairs, integrates with both cmp and treesitter
-	{ "numToStr/Comment.nvim", config = true }, -- Easily comment stuff
-	{ "phaazon/hop.nvim",
-		version = 'v2', -- optional but strongly recommended
-		config = function()
-			require('hop').setup(
-				{ keys = 'etovxqpdygfblzhckisuran' }
-			)
-		end,
-		opts = function()
-			local hop = require('hop')
-			local directions = require('hop.hint').HintDirection
+	{
+		"windwp/nvim-autopairs",
+		name = "npairs",
+		opts = load.opts_npairs,
+	}, -- Autopairs, integrates with both cmp and treesitter
 
-			vim.keymap.set('', 'f', function()
-				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true })
-			end, { remap = true })
-			vim.keymap.set('', 'F', function()
-				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true })
-			end, { remap = true })
-			vim.keymap.set('', 't', function()
-				hop.hint_char1({ direction = directions.AFTER_CURSOR, current_line_only = true, hint_offset = -1 })
-			end, { remap = true })
-			vim.keymap.set('', 'T', function()
-				hop.hint_char1({ direction = directions.BEFORE_CURSOR, current_line_only = true, hint_offset = 1 })
-			end, { remap = true })
-		end
+	{
+		"numToStr/Comment.nvim",
+		config = true
+	}, -- Easily comment stuff
+
+	{
+		"phaazon/hop.nvim",
+		version = 'v2',
+		config = load.hop.config,
+		opts = load.hop.opts
 	},
-	{ "kylechui/nvim-surround", config = true },
-	{ "ThePrimeagen/harpoon", config = true },
+
+	{
+		"kylechui/nvim-surround",
+		config = true
+	},
+
+	{
+		"ThePrimeagen/harpoon",
+		config = true
+	},
+
 	{ "github/copilot.vim" },
+
 	{
 		"abecodes/tabout.nvim",
-		config = config.tabout,
+		config = load.tabout,
 	},
+
 	{ "nvim-lua/popup.nvim" },
+
 	{
 		"mg979/vim-visual-multi",
 		name = "multicursor"
 	},
 
 	{ "folke/zen-mode.nvim" },
-	{ "norcalli/nvim-colorizer.lua", opts = {
-			'*'
-		} },
-	{ "tpope/vim-sleuth" }, -- Detect tabstop and shiftwidth automatically
+
+	{
+		"norcalli/nvim-colorizer.lua",
+		event = "BufEnter",
+		opts = { '*' }
+	},
+
+	{
+		"tpope/vim-sleuth",
+		event = "VeryLazy"
+	}, -- Detect tabstop and shiftwidth automatically
+
+	{
+		"karb94/neoscroll.nvim",
+		config = load.neoscroll,
+		event = "BufEnter"
+	},
+
+	{
+		"max397574/better-escape.nvim",
+		name = "better_scape",
+		lazy = true,
+		event = "VeryLazy",
+		config = load.betterscape
+
+	}
+
+	-- {
+	-- 	"rainbowhxch/accelerated-jk.nvim",
+	-- 	lazy = true,
+	-- 	event = "VeryLazy",
+	-- 	config = load.accelerated_jk.config
+	-- }
 }

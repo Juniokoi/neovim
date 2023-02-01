@@ -12,6 +12,10 @@ function themes.rosepine()
     require("misc.colorschemes.rosepine")
 end
 
+function themes.catppuccin()
+    require("misc.colorschemes.catppuccin")
+end
+
 function themes.set_theme(theme)
     if themes[theme] then
         themes[theme]()

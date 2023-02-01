@@ -4,8 +4,8 @@ function config.telescope()
     require"modules.utils.telescope"
 end
 
-function config.nvimtree()
-    require"modules.utils.nvimtree"
+function config.neotree()
+    require"modules.utils.neotree"
 end
 
 function config.toggleterm()

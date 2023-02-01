@@ -10,40 +10,47 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 			"jose-elias-alvarez/null-ls.nvim",
 			"b0o/SchemaStore.nvim",
-			-- json schemas
+			"simrat39/rust-tools.nvim",
 		},
 		config = conf.lsp
+	},
+	{
+		"glepnir/lspsaga.nvim",
+    event = "BufRead",
+    config = function()
+        require("lspsaga").setup({})
+    end
 	},
 	{
 		"lewis6991/gitsigns.nvim",
 		config = conf.gitsigns
 	},
-	  -- snippets
-  {
-    "L3MON4D3/LuaSnip",
-    dependencies = {
-      "rafamadriz/friendly-snippets",
-      config = function()
-        require("luasnip.loaders.from_vscode").lazy_load()
-      end,
-    },
-    opts = {
-      history = true,
-      delete_check_events = "TextChanged",
-    },
-    -- stylua: ignore
-    keys = {
-      {
-        "<C-j>",
-        function()
-          return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
-        end,
-        expr = true, silent = true, mode = "i",
-      },
-      { "<C-j>", function() require("luasnip").jump(1) end, mode = "s" },
-      { "<C-k>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
-    },
-  },
+	-- snippets
+	{
+		"L3MON4D3/LuaSnip",
+		dependencies = {
+			"rafamadriz/friendly-snippets",
+			config = function()
+				require("luasnip.loaders.from_vscode").lazy_load()
+			end,
+		},
+		opts = {
+			history = true,
+			delete_check_events = "TextChanged",
+		},
+		-- stylua: ignore
+		keys = {
+			{
+				"<C-j>",
+				function()
+					return require("luasnip").jumpable(1) and "<Plug>luasnip-jump-next" or "<tab>"
+				end,
+				expr = true, silent = true, mode = "i",
+			},
+			{ "<C-j>", function() require("luasnip").jump(1) end, mode = "s" },
+			{ "<C-k>", function() require("luasnip").jump(-1) end, mode = { "i", "s" } },
+		},
+	},
 	{
 		"hrsh7th/nvim-cmp",
 		version = false,
@@ -138,4 +145,8 @@ return {
 			"gpanders/nvim-parinfer"
 		}
 	},
+
+	{
+		"mfussenegger/nvim-jdtls",
+	}
 }

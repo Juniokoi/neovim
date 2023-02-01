@@ -1,4 +1,6 @@
-return {
+local icons = {}
+
+data = {
   kind = {
     Array = "",
     Boolean = "蘒",
@@ -128,6 +130,21 @@ return {
     TriangleShortArrowRight = "",
     TriangleShortArrowUp = "",
   },
+	dap = {
+		Breakpoint = "",
+		BreakpointCondition = "ﳁ",
+		BreakpointRejected = "",
+		LogPoint = "",
+		Pause = "",
+		Play = "",
+		RunLast = "↻",
+		StepBack = "",
+		StepInto = "",
+		StepOut = "",
+		StepOver = "",
+		Stopped = "",
+		Terminate = "ﱢ",
+	},
   diagnostics = {
     BoldError = "",
     Error = "",
@@ -152,3 +169,19 @@ return {
     CircuitBoard = "",
   },
 }
+---Get a specific icon set.
+---@param category string|"kind"|"type"|"documents"|"git"|"ui"|"diagnostics"|"misc"|"cmp"|"dap"
+---@param add_space? boolean @Add trailing space after the icon.
+function icons.get(category, add_space)
+	if add_space then
+		return setmetatable({}, {
+			__index = function(_, key)
+				return data[category][key] .. " "
+			end,
+		})
+	else
+		return data[category]
+	end
+end
+
+return icons

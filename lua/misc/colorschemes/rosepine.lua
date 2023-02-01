@@ -1,19 +1,31 @@
 require('rose-pine').setup({
-    highlight_groups = {
-        IndentBlanklineIndent1 = { fg = "subtle", bg = "NONE" },
-        IndentBlanklineIndent2 = { fg = "subtle", bg = "NONE" },
-        IndentBlanklineIndent3 = { fg = "#280034", bg = "NONE" },
-        IndentBlanklineIndent4 = { fg = "#282C00", bg = "NONE" },
-        IndentBlanklineIndent5 = { fg = "#200C34", bg = "NONE" },
-        IndentBlanklineIndent6 = { fg = "#082034", bg = "NONE" },
-        IndentBlanklineContextChar = { fg = "#00ff00" },
+    disable_background = true,
+    bold_vert_split = true,
+    groups = {
+        background = 'base',
+        panel = 'surface',
+        border = 'highlight_med',
+        comment = 'iris',
+        link = 'iris',
+        punctuation = 'foam',
 
-        ContextBlanklineIndent1 = { fg = 'iris', bg = "NONE" },
-        ContextBlanklineIndent2 = { fg = "foam", bg = "NONE" },
-        ContextBlanklineIndent3 = { fg = "rose", bg = "NONE" },
-        ContextBlanklineIndent4 = { fg = "gold", bg = "NONE" },
-        ContextBlanklineIndent5  = { fg = "pine", bg = "NONE" },
-        ContextBlanklineIndent6 = { fg = "foam", bg = "NONE" },
+        error = 'love',
+        hint = 'iris',
+        info = 'foam',
+        warn = 'gold',
+
+        headings = {
+            h1 = 'iris',
+            h2 = 'foam',
+            h3 = 'rose',
+            h4 = 'gold',
+            h5 = 'pine',
+            h6 = 'foam',
+        }
+        -- or set all headings at once
+        -- headings = 'subtle'
+    },
+    highlight_groups = {
     }
 })
 

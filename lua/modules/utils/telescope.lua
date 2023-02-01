@@ -90,7 +90,7 @@ telescope.setup {
   },
   extensions = {
     file_browser = {
-      theme = "ivy",
+      theme = "rose-pine",
       hijack_netrw = true,
       mappings = {
         i = {
@@ -114,5 +114,5 @@ telescope.setup {
 
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'frecency')
-pcall(require('telescope').load_extension, 'projects')
+pcall(require('telescope').load_extension, 'project')
 pcall(require('telescope').load_extension, 'file_browser')
