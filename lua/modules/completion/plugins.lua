@@ -1,4 +1,4 @@
-local conf = require('modules.completion.config')
+local conf = require("modules.completion.config")
 
 return {
 	{
@@ -12,27 +12,23 @@ return {
 			"b0o/SchemaStore.nvim",
 			"simrat39/rust-tools.nvim",
 		},
-		config = conf.lsp
+		config = conf.lsp,
 	},
 	{
 		"glepnir/lspsaga.nvim",
-    event = "BufRead",
-    config = function()
-        require("lspsaga").setup({})
-    end
+		event = "BufRead",
+		config = function() require("lspsaga").setup({}) end,
 	},
 	{
 		"lewis6991/gitsigns.nvim",
-		config = conf.gitsigns
+		config = conf.gitsigns,
 	},
 	-- snippets
 	{
 		"L3MON4D3/LuaSnip",
 		dependencies = {
 			"rafamadriz/friendly-snippets",
-			config = function()
-				require("luasnip.loaders.from_vscode").lazy_load()
-			end,
+			config = function() require("luasnip.loaders.from_vscode").lazy_load() end,
 		},
 		opts = {
 			history = true,
@@ -59,24 +55,22 @@ return {
 			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 			"hrsh7th/cmp-nvim-lsp",
-			'hrsh7th/cmp-nvim-lsp-signature-help',
-			'hrsh7th/cmp-cmdline',
-			'tamago324/cmp-zsh',
+			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"hrsh7th/cmp-cmdline",
+			"tamago324/cmp-zsh",
 			"saadparwaiz1/cmp_luasnip",
 			"JoosepAlviste/nvim-ts-context-commentstring", -- Comment on .TS Files
 			"windwp/nvim-ts-autotag",
-			"onsails/lspkind.nvim"
+			"onsails/lspkind.nvim",
 		},
-		opts = conf.cmp
+		opts = conf.cmp,
 	},
 
 	-- auto pairs
 	{
 		"echasnovski/mini.pairs",
 		event = "VeryLazy",
-		config = function(_, opts)
-			require("mini.pairs").setup(opts)
-		end,
+		config = function(_, opts) require("mini.pairs").setup(opts) end,
 	},
 
 	-- surround
@@ -115,7 +109,7 @@ return {
 
 	{
 		"lukas-reineke/indent-blankline.nvim",
-		config = conf.blankline
+		config = conf.blankline,
 	},
 
 	{ "j-hui/fidget.nvim", config = true },
@@ -125,28 +119,26 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		dependencies = {
 			"nvim-treesitter/playground",
-			"nvim-treesitter/nvim-treesitter-textobjects"
+			"nvim-treesitter/nvim-treesitter-textobjects",
 		},
 		config = conf.treesitter,
-		build = function()
-			pcall(require('nvim-treesitter.install').update { with_sync = true })
-		end
+		build = function() pcall(require("nvim-treesitter.install").update({ with_sync = true })) end,
 	},
 
 	{
 		"rcarriga/nvim-dap-ui",
 		dependencies = { "mfussenegger/nvim-dap" },
-		config = conf.dap
+		config = conf.dap,
 	},
 
 	{
 		"elkowar/yuck.vim",
 		dependencies = {
-			"gpanders/nvim-parinfer"
-		}
+			"gpanders/nvim-parinfer",
+		},
 	},
 
 	{
 		"mfussenegger/nvim-jdtls",
-	}
+	},
 }

@@ -1,21 +1,20 @@
-local _,cmp = pcall(require, "cmp")
-local _,luasnip = pcall(require, "luasnip")
+local _, cmp = pcall(require, "cmp")
+local _, luasnip = pcall(require, "luasnip")
 
 local cmp_select = function(pos, count)
 	if count then
 		if pos == "next" then
-		return cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select, count = count })
+			return cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select, count = count })
 		else
-		return cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select, count = count })
+			return cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select, count = count })
 		end
 	else
 		if pos == "next" then
-		return cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select})
+			return cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Select })
 		else
-		return cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select})
+			return cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Select })
 		end
 	end
-
 end
 
 local check_backspace = function()
@@ -33,28 +32,23 @@ local border = {
 	{ "╰", "CmpBorder" },
 	{ "│", "CmpBorder" },
 }
-cmp.event:on(
-	"confirm_done",
-	require'nvim-autopairs.completion.cmp'.on_confirm_done { map_char = { tex = "" } }
-)
-cmp.setup {
+cmp.event:on("confirm_done", require("nvim-autopairs.completion.cmp").on_confirm_done({ map_char = { tex = "" } }))
+cmp.setup({
 
 	snippet = {
-		expand = function(args)
-			require'luasnip'.lsp_expand(args.body)
-		end,
+		expand = function(args) require("luasnip").lsp_expand(args.body) end,
 	},
 
-	mapping = cmp.mapping.preset.insert {
-		['<C-k>'] = cmp_select("prev"),
-		['<C-j>'] = cmp_select("next"),
-		['<C-u>'] = cmp_select("prev",4),
-		['<C-d>'] = cmp_select("next",4),
-		['<C-p>'] = cmp.mapping.scroll_docs(-4),
-		['<C-n>'] = cmp.mapping.scroll_docs(4),
-		['<CR>'] = cmp.mapping.confirm {
-			behavior = cmp.ConfirmBehavior.Replace
-		},
+	mapping = cmp.mapping.preset.insert({
+		["<C-k>"] = cmp_select("prev"),
+		["<C-j>"] = cmp_select("next"),
+		["<C-u>"] = cmp_select("prev", 4),
+		["<C-d>"] = cmp_select("next", 4),
+		["<C-p>"] = cmp.mapping.scroll_docs(-4),
+		["<C-n>"] = cmp.mapping.scroll_docs(4),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+		}),
 		["<Tab>"] = cmp.mapping(function(fallback)
 			local copilot_keys = vim.fn["copilot#Accept"]("")
 			if cmp.visible() then
@@ -74,23 +68,23 @@ cmp.setup {
 			"i",
 			"s",
 		}),
-		['<C-y>'] = cmp.mapping.confirm({ select = true }),
+		["<C-y>"] = cmp.mapping.confirm({ select = true }),
 		["<C-Space>"] = cmp.mapping.complete({ select = false }),
-	},
+	}),
 
 	sources = cmp.config.sources({
-		{ name = 'nvim_lsp' },
-		{ name = 'path' },
-		{ name = 'luasnip' }
-		}, {
-			{name = 'buffer', keyword_lenght = 3}
+		{ name = "nvim_lsp" },
+		{ name = "path" },
+		{ name = "luasnip" },
+	}, {
+		{ name = "buffer", keyword_lenght = 3 },
 	}),
 
 	window = {
 		documentation = cmp.config.window.bordered(),
 		completion = {
 			border = border,
-			scrollbar = '║',
+			scrollbar = "║",
 
 			winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
 			col_offset = -3,
@@ -113,23 +107,22 @@ cmp.setup {
 			kind.menu = "    (" .. (strings[2] or "") .. ")"
 
 			return kind
-		end
+		end,
 	},
-}
-cmp.setup.cmdline({ '/', '?' }, {
+})
+cmp.setup.cmdline({ "/", "?" }, {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = {
-		{ name = 'buffer' }
-	}
+		{ name = "buffer" },
+	},
 })
 
 -- Use cmdline & path source for ':'
-cmp.setup.cmdline(':', {
+cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({
-		{ name = 'path' }
-		}, {
-			{ name = 'cmdline' }
-	})
+		{ name = "path" },
+	}, {
+		{ name = "cmdline" },
+	}),
 })
-

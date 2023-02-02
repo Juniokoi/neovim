@@ -13,11 +13,12 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +5 lua/modules/ui/config/noice.lua
-badd +8 lua/modules/completion/lisp.lua
+badd +1 after/plugin/keymaps.lua
+badd +54 lua/misc/init.lua
+badd +1 lua/misc/utils/init.lua
 argglobal
 %argdel
-edit lua/modules/completion/lisp.lua
+edit after/plugin/keymaps.lua
 let s:save_splitbelow = &splitbelow
 let s:save_splitright = &splitright
 set splitbelow splitright
@@ -34,14 +35,14 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-wincmd =
+exe 'vert 1resize ' . ((&columns * 98 + 69) / 139)
+exe 'vert 2resize ' . ((&columns * 40 + 69) / 139)
 argglobal
-balt lua/modules/ui/config/noice.lua
-let s:cpo_save=&cpo
-set cpo&vim
-inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
+balt lua/misc/init.lua
 xnoremap <buffer> <silent>  :lua require'nvim-treesitter.incremental_selection'.node_incremental()
 xnoremap <buffer> <silent> <nop> :lua require'nvim-treesitter.incremental_selection'.scope_incremental()
+let s:cpo_save=&cpo
+set cpo&vim
 xnoremap <buffer> <silent> <BS> :lua require'nvim-treesitter.incremental_selection'.node_decremental()
 xnoremap <buffer> <silent> <C-Bslash> :lua require'nvim-treesitter.incremental_selection'.node_incremental()
 inoremap <buffer> <config.e> l<Cmd>lua require('nvim-autopairs.fastwrap').show()
@@ -79,14 +80,14 @@ setlocal dictionary=
 setlocal nodiff
 setlocal equalprg=
 setlocal errorformat=
-setlocal noexpandtab
+setlocal expandtab
 if &filetype != 'lua'
 setlocal filetype=lua
 endif
 setlocal fillchars=
 setlocal fixendofline
 setlocal foldcolumn=0
-setlocal foldenable
+setlocal nofoldenable
 setlocal foldexpr=nvim_treesitter#foldexpr()
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -129,13 +130,13 @@ setlocal nopreserveindent
 setlocal nopreviewwindow
 setlocal quoteescape=\\
 setlocal noreadonly
-setlocal relativenumber
+setlocal norelativenumber
 setlocal norightleft
 setlocal rightleftcmd=search
 setlocal scrollback=-1
 setlocal noscrollbind
 setlocal scrolloff=-1
-setlocal shiftwidth=0
+setlocal shiftwidth=4
 setlocal showbreak=
 setlocal sidescrolloff=-1
 setlocal signcolumn=yes
@@ -147,7 +148,7 @@ setlocal spellfile=
 setlocal spelllang=en
 setlocal spelloptions=noplainbuffer
 setlocal statuscolumn=
-setlocal statusline=%<%#lualine_c_10_command#▊\ %#lualine_c_normal#%#lualine_c_11_command#\ %#lualine_c_normal#%#lualine_c_12_command#\ \ ~/.config/nvim\ %#lualine_c_normal#%#lualine_c_filetype_DevIconLua_command#\ \ %#lualine_c_normal#%#lualine_c_normal#%#lualine_c_filename_command#\ lisp.lua\ [+]\ %#lualine_c_normal#%#lualine_c_normal#\ 2.3k\ %#lualine_c_progress_command#\ 7%%\ %#lualine_c_normal#%#lualine_c_diagnostics_hint_command#\ \ 1\ %#lualine_c_normal#%#lualine_c_normal#\ %=\ %#lualine_c_normal#%=%#lualine_x_3_command#\ utf-8\ %#lualine_c_normal#%#lualine_x_fileformat_command#\ \ %#lualine_c_normal#%#lualine_x_branch_command#\ \ main\ %#lualine_c_normal#%#lualine_x_diff_added_command#\ \ 13\ %#lualine_x_diff_modified_command#柳\ 19\ %#lualine_x_diff_removed_command#\ 30\ %#lualine_c_normal#%#lualine_x_8_command#\ LSP:\ \ %#lualine_c_normal#%#lualine_x_9_command#\ ▊
+setlocal statusline=%<%#lualine_c_2_command#▊\ %#lualine_c_normal#%#lualine_c_3_command#\ %#lualine_c_normal#%#lualine_c_filetype_DevIconLua_command#\ \ %#lualine_c_normal#%#lualine_c_normal#%#lualine_c_filename_command#\ keymaps.lua\ %#lualine_c_normal#%#lualine_c_normal#\ 5.1k\ %#lualine_c_progress_command#\ 1%%\ %#lualine_c_normal#%#lualine_c_normal#\ %=\ %#lualine_c_normal#%=%#lualine_x_11_command#\ ,\ %#lualine_c_normal#%#lualine_x_12_command#\ utf-8\ %#lualine_c_normal#%#lualine_x_fileformat_command#\ \ %#lualine_c_normal#%#lualine_x_branch_command#\ \ main\ %#lualine_c_normal#%#lualine_x_diff_added_command#\ \ 45\ %#lualine_x_diff_modified_command#柳\ 4\ %#lualine_x_diff_removed_command#\ 14\ %#lualine_c_normal#%#lualine_x_17_command#\ \ %#lualine_c_normal#%#lualine_x_18_command#\ ▊
 setlocal suffixesadd=.lua
 setlocal noswapfile
 setlocal synmaxcol=3000
@@ -155,7 +156,7 @@ if &syntax != ''
 setlocal syntax=
 endif
 setlocal tagfunc=v:lua.vim.lsp.tagfunc
-setlocal tabstop=2
+setlocal tabstop=8
 setlocal tagcase=
 setlocal tags=
 setlocal textwidth=0
@@ -166,24 +167,25 @@ setlocal undolevels=-123456
 setlocal varsofttabstop=
 setlocal vartabstop=
 setlocal virtualedit=
-setlocal winbar=%#LspSagaWinbarFolder#\ %*%#LspSagaWinbarFolderName#completion%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFileIcon#\ %*%#LspSagaWinbarFile#lisp.lua%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFunction#\ on_attach%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFunction#\ vim.api.nvim_buf_create_user_command
+setlocal winbar=%#LspSagaWinbarFolder#\ %*%#LspSagaWinbarFolderName#plugin%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFileIcon#\ %*%#LspSagaWinbarFile#keymaps.lua%*
 setlocal winblend=0
 setlocal winhighlight=
 setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 8 - ((7 * winheight(0) + 20) / 40)
+let s:l = 2 - ((1 * winheight(0) + 20) / 40)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 8
-normal! 07|
+keepjumps 2
+normal! 0
+lcd ~/.config/nvim/after
 wincmd w
 argglobal
 enew
-file neo-tree\ filesystem\ \[1]
-balt lua/modules/completion/lisp.lua
+file ~/.config/nvim/neo-tree\ filesystem\ \[1]
+balt ~/.config/nvim/after/plugin/keymaps.lua
 let s:cpo_save=&cpo
 set cpo&vim
 inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
@@ -229,7 +231,7 @@ endif
 setlocal fillchars=
 setlocal fixendofline
 setlocal foldcolumn=0
-setlocal foldenable
+setlocal nofoldenable
 setlocal foldexpr=nvim_treesitter#foldexpr()
 setlocal foldignore=#
 setlocal foldlevel=99
@@ -248,7 +250,7 @@ setlocal imsearch=-1
 setlocal include=
 setlocal includeexpr=
 setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
+setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e,0=end,0=until
 setlocal noinfercase
 setlocal iskeyword=@,48-57,_,192-255
 setlocal keywordprg=
@@ -317,7 +319,8 @@ setlocal winfixwidth
 setlocal nowrap
 setlocal wrapmargin=0
 wincmd w
-wincmd =
+exe 'vert 1resize ' . ((&columns * 98 + 69) / 139)
+exe 'vert 2resize ' . ((&columns * 40 + 69) / 139)
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -332,7 +335,6 @@ if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)
 endif
 let &g:so = s:so_save | let &g:siso = s:siso_save
-nohlsearch
 doautoall SessionLoadPost
 unlet SessionLoad
 " vim: set ft=vim :

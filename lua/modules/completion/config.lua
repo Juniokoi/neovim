@@ -1,21 +1,16 @@
 local config = {}
 
-function config.lsp()
-	require("modules.completion.lisp")
-end
+function config.lsp() require("modules.completion.lisp") end
 
-function config.cmp()
-	require("modules.completion.cmp")
-end
+function config.cmp() require("modules.completion.cmp") end
 
 function config.blankline()
-	require('indent_blankline').setup {
+	require("indent_blankline").setup({
 		char = "▏",
 		filetype_exclude = { "help", "alpha", "dashboard", "neo-tree", "Trouble", "lazy" },
 		space_char_blankline = " ",
 		show_current_context = true,
 		show_trailing_blankline_indent = false,
-
 
 		context_highlight_list = {
 			"ContextBlanklineIndent1",
@@ -33,29 +28,27 @@ function config.blankline()
 			"IndentBlanklineIndent5",
 			"IndentBlanklineIndent6",
 		},
-	}
+	})
 end
 
 function config.gitsigns()
-	require('gitsigns').setup {
+	require("gitsigns").setup({
 		signs = {
-			add = { text = '+' },
-			change = { text = '~' },
-			delete = { text = '_' },
-			topdelete = { text = '‾' },
-			changedelete = { text = '~' },
+			add = { text = "+" },
+			change = { text = "~" },
+			delete = { text = "_" },
+			topdelete = { text = "‾" },
+			changedelete = { text = "~" },
 		},
-	}
+	})
 end
 
-function config.treesitter()
-	require 'modules.completion.treesitter'
-end
+function config.treesitter() require("modules.completion.treesitter") end
 
 function config.dapui()
 	local icons = {
-		ui = require("modules.ui.icons").get("ui"),
-		dap = require("modules.ui.icons").get("dap"),
+		ui = require("misc.icons").get("ui"),
+		dap = require("misc.icons").get("dap"),
 	}
 
 	require("dapui").setup({
@@ -112,20 +105,14 @@ end
 
 function config.dap()
 	local icons = { dap = require("misc.icons").get("dap") }
-	local colors = require("modules.utils").get_palette()
+	local colors = require("misc.utils.pallete").get_palette()
 
 	local dap = require("dap")
 	local dapui = require("dapui")
 
-	dap.listeners.after.event_initialized["dapui_config"] = function()
-		dapui.open()
-	end
-	dap.listeners.after.event_terminated["dapui_config"] = function()
-		dapui.close()
-	end
-	dap.listeners.after.event_exited["dapui_config"] = function()
-		dapui.close()
-	end
+	dap.listeners.after.event_initialized["dapui_config"] = function() dapui.open() end
+	dap.listeners.after.event_terminated["dapui_config"] = function() dapui.close() end
+	dap.listeners.after.event_exited["dapui_config"] = function() dapui.close() end
 
 	-- We need to override nvim-dap's default highlight groups, AFTER requiring nvim-dap for catppuccin.
 	vim.api.nvim_set_hl(0, "DapStopped", { fg = colors.green })
@@ -155,9 +142,7 @@ function config.dap()
 			name = "Launch",
 			type = "lldb",
 			request = "launch",
-			program = function()
-				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-			end,
+			program = function() return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file") end,
 			cwd = "${workspaceFolder}",
 			stopOnEntry = false,
 			args = {},
@@ -178,6 +163,54 @@ function config.dap()
 
 	dap.configurations.c = dap.configurations.cpp
 	dap.configurations.rust = dap.configurations.cpp
+
+	dap.adapters.go = function(callback)
+		local stdout = vim.loop.new_pipe(false)
+		local handle
+		local pid_or_err
+		local port = 38697
+		local opts = {
+			stdio = { nil, stdout },
+			args = { "dap", "-l", "127.0.0.1:" .. port },
+			detached = true,
+		}
+		handle, pid_or_err = vim.loop.spawn("dlv", opts, function(code)
+			stdout:close()
+			handle:close()
+			if code ~= 0 then
+				vim.notify(
+					string.format('"dlv" exited with code: %d, please check your configs for correctness.', code),
+					vim.log.levels.WARN,
+					{ title = "[go] DAP Warning!" }
+				)
+			end
+		end)
+		assert(handle, "Error running dlv: " .. tostring(pid_or_err))
+		stdout:read_start(function(err, chunk)
+			assert(not err, err)
+			if chunk then vim.schedule(function() require("dap.repl").append(chunk) end) end
+		end)
+		-- Wait for delve to start
+		vim.defer_fn(function() callback({ type = "server", host = "127.0.0.1", port = port }) end, 100)
+	end
+	-- https://github.com/go-delve/delve/blob/master/Documentation/usage/dlv_dap.md
+	dap.configurations.go = {
+		{ type = "go", name = "Debug", request = "launch", program = "${file}" },
+		{
+			type = "go",
+			name = "Debug test", -- configuration for debugging test files
+			request = "launch",
+			mode = "test",
+			program = "${file}",
+		}, -- works with go.mod packages and sub packages
+		{
+			type = "go",
+			name = "Debug test (go.mod)",
+			request = "launch",
+			mode = "test",
+			program = "./${relativeFileDirname}",
+		},
+	}
 end
 
 return config

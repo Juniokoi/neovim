@@ -6,10 +6,9 @@ local options = {
 	conceallevel = 0, -- so that `` is visible in markdown files
 	fileencoding = "utf-8", -- the encoding written to a file
 	hlsearch = false, -- highlight all matches on previous search pattern
-	termguicolors = true, -- set term gui colors most terminals support this
 	ignorecase = true, -- ignore case in search patterns
 	mouse = "a", -- allow the mouse to be used in neovim
-	pumheight = 10, -- pop up menu height
+	pumheight = 0, -- pop up menu height
 	showmode = true, -- we don't need to see things like -- INSERT -- anymore
 
 	-- Fold
@@ -18,13 +17,13 @@ local options = {
 	splitbelow = true, -- force all horizontal splits to go below current window
 	splitright = true, -- force all vertical splits to go to the right of current window
 	swapfile = false, -- creates a swapfile
-	foldcolumn = "2",
+
 	undofile = true, -- enable persistent undo
 	updatetime = 300, -- faster completion (4000ms default)
 	writebackup = false, -- if a file is being edited by another program (or was written to file while editing with another program), it is not allowed to be edited
 	expandtab = false, -- convert tabs to spaces
 	nu = true, -- set numbered lines
-	relativenumber = false, -- set relktive numbered lines
+	relativenumber = true, -- set relktive numbered lines
 
 	-- Cursors
 	cursorline = true, -- highlight the current line
@@ -35,7 +34,7 @@ local options = {
 	softtabstop = 4,
 	showtabline = 4, -- always show tabs
 	shiftwidth = 4, -- the number of spaces inserted for each indentation
-	tabstop = 2, -- insert 2 spaces for a table
+	tabstop = 4, -- insert 2 spaces for a table
 
 	signcolumn = "yes", -- always show the sign column, otherwise it would shift the text each time
 	wrap = false, -- display lines as one long line
@@ -52,7 +51,7 @@ for k, v in pairs(options) do
 	vim.opt[k] = v
 end
 
-vim.opt.shortmess:append "c" -- Enables to use >> or << easier
+vim.opt.shortmess:append("c") -- Enables to use >> or << easier
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_perl_provider = 0
 
@@ -65,3 +64,7 @@ vim.o.foldcolumn = "0"
 
 vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 vim.o.listchars = "trail:·,tab:│ ,extends:⤦,precedes:«,conceal:↳,nbsp:%"
+
+local settings = {}
+settings["palette_overwrite"] = {}
+return settings

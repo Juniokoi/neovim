@@ -1,4 +1,4 @@
-local load = require('modules.editor.config')
+local load = require("modules.editor.config")
 
 return {
 	{
@@ -9,24 +9,24 @@ return {
 
 	{
 		"numToStr/Comment.nvim",
-		config = true
+		config = true,
 	}, -- Easily comment stuff
 
 	{
 		"phaazon/hop.nvim",
-		version = 'v2',
+		version = "v2",
 		config = load.hop.config,
-		opts = load.hop.opts
+		opts = load.hop.opts,
 	},
 
 	{
 		"kylechui/nvim-surround",
-		config = true
+		config = true,
 	},
 
 	{
 		"ThePrimeagen/harpoon",
-		config = true
+		config = true,
 	},
 
 	{ "github/copilot.vim" },
@@ -40,7 +40,7 @@ return {
 
 	{
 		"mg979/vim-visual-multi",
-		name = "multicursor"
+		name = "multicursor",
 	},
 
 	{ "folke/zen-mode.nvim" },
@@ -48,18 +48,18 @@ return {
 	{
 		"norcalli/nvim-colorizer.lua",
 		event = "BufEnter",
-		opts = { '*' }
+		opts = { "*" },
 	},
 
 	{
 		"tpope/vim-sleuth",
-		event = "VeryLazy"
+		event = "VeryLazy",
 	}, -- Detect tabstop and shiftwidth automatically
 
 	{
 		"karb94/neoscroll.nvim",
 		config = load.neoscroll,
-		event = "BufEnter"
+		event = "BufEnter",
 	},
 
 	{
@@ -67,9 +67,8 @@ return {
 		name = "better_scape",
 		lazy = true,
 		event = "VeryLazy",
-		config = load.betterscape
-
-	}
+		config = load.betterscape,
+	},
 
 	-- {
 	-- 	"rainbowhxch/accelerated-jk.nvim",
