@@ -14,6 +14,7 @@ local lua = bind.lua -- :lua [cmd]<CR>
 -- Special bindindings
 local lazy = bind.lazy -- :Lazy
 local lspsaga = bind.lspsaga -- :Lspsaga
+local trouble = bind.trouble -- :Lspsaga
 local dap = bind.dap -- :lua require('dap').
 local te = bind.te -- :Telescope
 
@@ -41,7 +42,7 @@ local keymaps = {
 	["n|<C-A-j>"] = cr("resize -2"):desc("Resize window downward"),
 	["n|<C-A-h>"] = cr("vertical resize -2"):desc("Resize window to left"),
 	["n|<C-A-l>"] = cr("vertical resize +2"):desc("Resize window to left"),
-	["n|;r"] = cr("silent w | SaveSession | so %"):desc("Source actual noevim file"),
+	["n|;r"] = cr("silent update | so %"):desc("Source actual noevim file"),
 
 	-- l.keymap('n', '<leader>/', function()
 	--   require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown{ winblend = 10, previewer = false, }) end,
@@ -59,10 +60,20 @@ local keymaps = {
 
 	-- Neotree
 	["n|<leader>e"] = cr("Neotree toggle"):desc("Neotree: toggle"),
-	["n|gg"] = lua("_Lazygit_toggle()"):desc("Lazygit: toggle"),
+	["n|<leader>g"] = lua("_Lazygit_toggle()"):desc("Lazygit: toggle"),
 	["n|<leader>r"] = lua("_Rust_toggle()"):desc("Rust Cargo Run: terminal"),
 
+	-- LSP
 	["n|;f"] = cr("Format"):desc("LSP: format file"),
+
+	-- Trouble
+	["n|<leader>tt"] = trouble(""):desc("Toggle Trouble"),
+	["n|<leader>tw"] = trouble("workspace_diagnostics"):desc("Workspace Diagnostics"),
+	["n|<leader>td"] = trouble("document_diagnostics"):desc("Document Diagnostics"),
+	["n|<leader>tl"] = trouble("loclist"):desc("Loclist"),
+	["n|<leader>tq"] = trouble("quickfix"):desc("Quick Fix"),
+	["n|<leader>tr"] = trouble("lsp_references"):desc("References"),
+
 	["n|gh"] = lspsaga("lsp_finder"):desc("Finder"),
 	["n|go"] = lspsaga("outline"):desc("[g]oto [o]utline"),
 	["n|gr"] = lspsaga("rename"):desc("Rename inside file"),

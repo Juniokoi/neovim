@@ -25,7 +25,9 @@ require("rose-pine").setup({
 		-- or set all headings at once
 		-- headings = 'subtle'
 	},
-	highlight_groups = {},
+	highlight_groups = {
+		Comment = { fg = "iris" },
+	},
 })
 
 vim.cmd("colorscheme rose-pine")

@@ -141,4 +141,10 @@ return {
 	{
 		"mfussenegger/nvim-jdtls",
 	},
+	{
+		"folke/trouble.nvim",
+		lazy = true,
+		cmd = { "Trouble", "TroubleToggle", "TroubleRefresh", "TroubleClose" },
+		setup = true,
+	},
 }

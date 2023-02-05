@@ -62,8 +62,8 @@ vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.o.foldenable = true
 vim.o.foldcolumn = "0"
 
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
-vim.o.listchars = "trail:·,tab:│ ,extends:⤦,precedes:«,conceal:↳,nbsp:%"
+--vim.o.sessionoptions = "blank,bffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+vim.o.listchars = "trail:·,tab:→ ,space: ,extends:⤦,precedes:«,conceal:↳,nbsp:%"
 
 local settings = {}
 settings["palette_overwrite"] = {}

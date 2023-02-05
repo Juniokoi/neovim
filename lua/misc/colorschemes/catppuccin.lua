@@ -1,7 +1,19 @@
 local ok, catppuccin = pcall(require, "catppuccin")
-if not ok then
-	vim.cmd.colorscheme("habamax")
+local _ok, ucp = pcall(require, "catppuccin.utils.colors")
+
+if not ok or not _ok then
+	vim.cmd.colorscheme("desert")
 	return
+end
+
+local transparent_background = true -- Set background transparency here!
+
+local transparent = function(cp)
+	if transparent_background then
+		return cp.none
+	else
+		return cp.base
+	end
 end
 
 catppuccin.setup({
@@ -13,18 +25,13 @@ catppuccin.setup({
 	transparent_background = true,
 	show_end_of_buffer = false, -- show the '~' characters after the end of buffers
 	term_colors = false,
-	dim_inactive = {
-		enabled = false,
-		shade = "dark",
-		percentage = 0.15,
-	},
 	no_italic = false, -- Force no italic
 	no_bold = false, -- Force no bold
 	styles = {
 		comments = { "italic" },
 		conditionals = { "italic" },
 		loops = {},
-		functions = {},
+		functions = { "italic" },
 		keywords = {},
 		strings = {},
 		variables = {},
@@ -34,36 +41,205 @@ catppuccin.setup({
 		types = {},
 		operators = {},
 	},
-	color_overrides = {},
+	color_overrides = {
+		flamingo = "#ea9d34",
+		mauve = "#CC6CFF",
+		pink = "#FF7BDB",
+		red = "#FF4E84",
+		sapphire = "#36D0E0",
+		maroon = "#E45B74",
+		peach = "#d7827e",
+		rosewater = "#FFA18F",
+		yellow = "#FAE3B0",
+		green = "#80FF90",
+		blue = "#31748f",
+		sky = "#6BE8FF",
+		teal = "#96FFEE",
+		lavender = "#c4a7e7",
+
+		text = "#e0def4",
+		subtext1 = "#908caa",
+		subtext0 = "#A6ADC8",
+		overlay2 = "#C3BAC6",
+		overlay1 = "#988BA2",
+		overlay0 = "#26233a",
+		surface2 = "#6E6C7E",
+		surface1 = "#575268",
+		surface0 = "#1f1d2e",
+
+		base = "#191724",
+		mantle = "#1A1826",
+		crust = "#161320",
+	},
 	highlight_overrides = {
-		all = function(colors)
+		all = function(cp)
 			return {
-				ColorColumn = { bg = colors.flamingo },
-				CursorLine = { bg = colors.flamingo },
-				CursorLineNr = { bg = colors.flamingo },
-				LineNrAbove = { fg = colors.flamingo },
-				LineNrBelow = { fg = colors.flamingo },
+				-- ucp.darken(dark color, percentage, base color)
+				Comment = { fg = ucp.darken(cp.base, 0.3, cp.sky), bg = transparent(cp) },
+				CursorColumn = { bg = cp.surface0 },
+				CursorLine = { bg = cp.surface0 },
+				LineNr = { bg = transparent(cp) },
+				LineNrAbove = { bg = cp.mantle },
+				LineNrBelow = { bg = cp.base },
 
-				NoiceCmdlinePopup = { fg = colors.flamingo },
-				NoiceFormatConfirm = { fg = colors.flamingo },
-				NoiceCmdlinePopupBorderCmdline = { fg = colors.flamingo },
-				NoiceMini = { fg = colors.flamingo, bg = colors.flamingo },
+				Normal = { fg = cp.text, bg = transparent(cp) }, -- Normal is for current window
+				NormalNC = { fg = cp.text, bg = transparent(cp) }, -- NormalNC is for non-current windows
+				NormalFloat = { fg = cp.text, bg = transparent(cp) }, -- NormalFloat is for floating windows
 
-				IndentBlanklineIndent1 = { fg = colors.flamingo },
-				IndentBlanklineIndent2 = { fg = colors.flamingo },
-				IndentBlanklineIndent3 = { fg = "#280034" },
-				IndentBlanklineIndent4 = { fg = "#282C00" },
-				IndentBlanklineIndent5 = { fg = "#200C34" },
-				IndentBlanklineIndent6 = { fg = "#082034" },
-				IndentBlanklineContextChar = { fg = "#00ff00" },
+				NoiceCmdlinePopup = { fg = cp.flamingo },
+				NoiceFormatConfirm = { fg = cp.flamingo },
+				NoiceCmdlinePopupBorderCmdline = { fg = cp.flamingo },
+				NoiceMini = { fg = cp.flamingo, bg = transparent(cp) },
 
-				ContextBlanklineIndent1 = { fg = colors.flamingo },
-				ContextBlanklineIndent2 = { fg = colors.flamingo },
-				ContextBlanklineIndent3 = { fg = colors.flamingo },
-				ContextBlanklineIndent4 = { fg = colors.flamingo },
-				ContextBlanklineIndent5 = { fg = colors.flamingo },
-				ContextBlanklineIndent6 = { fg = colors.flamingo },
-				MiniAnimateCursor = { fg = "NONE", bg = colors.flamingo },
+				PanelHeading = { fg = cp.lavender, style = { "bold", "italic" } },
+
+				LazyH1 = { bg = "NONE", fg = cp.lavender, style = { "bold" } },
+				LazyButton = { bg = "NONE", fg = cp.overlay0 },
+				LazyButtonActive = { bg = "NONE", fg = cp.lavender, style = { " bold" } },
+				LazySpecial = { fg = cp.sapphire },
+
+				-- LazyH1 = { bg = cp.peach, fg = cp.base, style = { "bold" } },
+				-- LazyButton = { bg = "NONE", fg = cp.subtext0 },
+				-- LazyButtonActive = { bg = cp.overlay1, fg = cp.base, style = { " bold" } },
+				-- LazySpecial = { fg = cp.sapphire },
+
+				-- overrider
+				FloatBorder = { fg = cp.overlay1, bg = transparent(cp) },
+				TelescopeBorder = { fg = cp.overlay1 },
+				WhichKeyBorder = { fg = cp.overlay1 },
+				NeoTreeFloatBorder = { fg = cp.overlay1 },
+
+				IndentBlanklineContextChar = { fg = cp.none },
+				IndentBlanklineIndent6 = { fg = ucp.darken(cp.base, 0.5, cp.rosewater) },
+				IndentBlanklineIndent5 = { fg = ucp.darken(cp.base, 0.5, cp.flamingo) },
+				IndentBlanklineIndent4 = { fg = ucp.darken(cp.base, 0.5, cp.red) },
+				IndentBlanklineIndent3 = { fg = ucp.darken(cp.base, 0.5, cp.maroon) },
+				IndentBlanklineIndent2 = { fg = ucp.darken(cp.base, 0.5, cp.pink) },
+				IndentBlanklineIndent1 = { fg = ucp.darken(cp.base, 0.5, cp.mauve) },
+
+				ContextBlanklineIndent6 = { fg = cp.rosewater },
+				ContextBlanklineIndent5 = { fg = cp.flamingo },
+				ContextBlanklineIndent4 = { fg = cp.red },
+				ContextBlanklineIndent3 = { fg = cp.maroon },
+				ContextBlanklineIndent2 = { fg = cp.pink },
+				ContextBlanklineIndent1 = { fg = cp.mauve },
+
+				MiniAnimateCursor = { fg = "NONE", bg = cp.flamingo },
+				CursorLineNr = { fg = cp.green, bold = true },
+				Search = { bg = cp.surface1, fg = cp.pink, style = { "bold" } },
+				IncSearch = { bg = cp.pink, fg = cp.surface1 },
+				Keyword = { fg = cp.pink },
+				Type = { fg = cp.blue },
+				Typedef = { fg = cp.yellow },
+				StorageClass = { fg = cp.red, style = { "italic" } },
+
+				-- For native lsp configs.
+				DiagnosticVirtualTextError = { bg = cp.none },
+				DiagnosticVirtualTextWarn = { bg = cp.none },
+				DiagnosticVirtualTextInfo = { bg = cp.none },
+				DiagnosticVirtualTextHint = { fg = cp.rosewater, bg = cp.none },
+
+				DiagnosticHint = { fg = cp.rosewater },
+				LspDiagnosticsDefaultHint = { fg = cp.rosewater },
+				LspDiagnosticsHint = { fg = cp.rosewater },
+				LspDiagnosticsVirtualTextHint = { fg = cp.rosewater },
+				LspDiagnosticsUnderlineHint = { sp = cp.rosewater },
+
+				-- For fidget.
+				FidgetTask = { bg = cp.base, fg = cp.surface2 },
+				FidgetTitle = { fg = cp.blue, style = { "bold" } },
+
+				-- For trouble.nvim
+				TroubleNormal = { bg = cp.base },
+				--
+				-- -- For treesitter.
+				-- ["@field"] = { fg = cp.mauve },
+				-- ["@property"] = { fg = cp.lavender },
+				--
+				["@include"] = { fg = cp.teal },
+				-- ["@operator"] = { fg = cp.sky },
+				["@keyword.operator"] = { fg = cp.sky },
+				["@punctuation.special"] = { fg = cp.maroon },
+				--
+				-- -- ["@float"] = { fg = cp.peach },
+				-- -- ["@number"] = { fg = cp.peach },
+				-- -- ["@boolean"] = { fg = cp.peach },
+				--
+				["@constructor"] = { fg = cp.lavender },
+				-- -- ["@constant"] = { fg = cp.peach },
+				-- -- ["@conditional"] = { fg = cp.mauve },
+				-- -- ["@repeat"] = { fg = cp.mauve },
+				-- ["@exception"] = { fg = cp.peach },
+				--
+				["@constant.builtin"] = { fg = cp.lavender },
+				-- -- ["@function.builtin"] = { fg = cp.peach, style = { "italic" } },
+				-- -- ["@type.builtin"] = { fg = cp.yellow, style = { "italic" } },
+				-- ["@type.qualifier"] = { link = "@keyword" },
+				["@variable.builtin"] = { fg = cp.red, style = { "italic" } },
+				--
+				-- -- ["@function"] = { fg = cp.blue },
+				-- ["@function.macro"] = { fg = cp.red, style = {} },
+				-- ["@parameter"] = { fg = cp.rosewater },
+				["@keyword"] = { fg = cp.red, style = { "italic" } },
+				["@keyword.function"] = { fg = cp.maroon },
+				["@keyword.return"] = { fg = cp.pink, style = {} },
+				--
+				-- ["@text.note"] = { fg = cp.base, bg = cp.blue },
+				-- ["@text.warning"] = { fg = cp.base, bg = cp.yellow },
+				-- ["@text.danger"] = { fg = cp.base, bg = cp.red },
+				-- ["@constant.macro"] = { fg = cp.mauve },
+				--
+				-- -- ["@label"] = { fg = cp.blue },
+				-- ["@method"] = { fg = cp.blue, style = { "italic" } },
+				-- ["@namespace"] = { fg = cp.rosewater, style = {} },
+				--
+				-- ["@punctuation.delimiter"] = { fg = cp.teal },
+				-- ["@punctuation.bracket"] = { fg = cp.overlay2 },
+				-- -- ["@string"] = { fg = cp.green },
+				-- -- ["@string.regex"] = { fg = cp.peach },
+				-- ["@type"] = { fg = cp.yellow },
+				-- ["@variable"] = { fg = cp.text },
+				["@tag.attribute"] = { fg = cp.mauve, style = { "italic" } },
+				["@tag"] = { fg = cp.peach },
+				["@tag.delimiter"] = { fg = cp.maroon },
+				["@text"] = { fg = cp.text },
+				--
+				-- -- ["@text.uri"] = { fg = cp.rosewater, style = { "italic", "underline" } },
+				-- -- ["@text.literal"] = { fg = cp.teal, style = { "italic" } },
+				-- -- ["@text.reference"] = { fg = cp.lavender, style = { "bold" } },
+				-- -- ["@text.title"] = { fg = cp.blue, style = { "bold" } },
+				-- -- ["@text.emphasis"] = { fg = cp.maroon, style = { "italic" } },
+				-- -- ["@text.strong"] = { fg = cp.maroon, style = { "bold" } },
+				-- -- ["@string.escape"] = { fg = cp.pink },
+				--
+				-- -- ["@property.toml"] = { fg = cp.blue },
+				-- -- ["@field.yaml"] = { fg = cp.blue },
+				--
+				-- -- ["@label.json"] = { fg = cp.blue },
+				--
+				-- ["@function.builtin.bash"] = { fg = cp.red, style = { "italic" } },
+				-- ["@parameter.bash"] = { fg = cp.red, style = { "italic" } },
+				--
+				-- ["@field.lua"] = { fg = cp.lavender },
+				-- ["@constructor.lua"] = { fg = cp.flamingo },
+				--
+				-- ["@constant.java"] = { fg = cp.teal },
+				--
+				-- ["@property.typescript"] = { fg = cp.lavender, style = { "italic" } },
+				-- -- ["@constructor.typescript"] = { fg = cp.lavender },
+				--
+				-- -- ["@constructor.tsx"] = { fg = cp.lavender },
+				-- -- ["@tag.attribute.tsx"] = { fg = cp.mauve },
+				--
+				-- ["@type.css"] = { fg = cp.lavender },
+				-- ["@property.css"] = { fg = cp.yellow, style = { "italic" } },
+				--
+				-- ["@type.builtin.c"] = { fg = cp.yellow, style = {} },
+				--
+				-- ["@property.cpp"] = { fg = cp.text },
+				-- ["@type.builtin.cpp"] = { fg = cp.yellow, style = {} },
+
+				-- ["@symbol"] = { fg = cp.flamingo },
 			}
 		end,
 	},
@@ -72,10 +248,12 @@ catppuccin.setup({
 		gitsigns = true,
 		nvimtree = true,
 		telescope = true,
-		notify = true,
+		notify = false,
 		mini = false,
 		-- For more plugins integrations please scroll down (https://github.com/catppuccin/nvim#integrations)
 	},
 })
 
+vim.cmd("hi Comment cterm=italic")
+--vim.cmd("CatppuccinCompile")
 vim.cmd.colorscheme("catppuccin")

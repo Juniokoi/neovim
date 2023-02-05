@@ -15,6 +15,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 local function load_core()
 	set_leader_key()
 	require("core.lazy")
+	require("misc.colorschemes").set_theme("catppuccin")
 end
 
 load_core()

@@ -53,14 +53,14 @@ function rhs_options:lazy(cmd_string)
 	return self
 end
 
-function rhs_options:lsp(cmd_string)
+function rhs_options:trouble(cmd_string)
 	if string.sub(cmd_string, 1, 1) == "." then
 		self.cmd = (":lua require('trouble')%s<CR>"):format(cmd_string)
 	else
-		self.cmd = (":TroubleToggle%s<CR>"):format(cmd_string)
+		self.cmd = (":TroubleToggle %s<CR>"):format(cmd_string)
 	end
 
-	self.type = "lsp"
+	self.type = "trouble"
 	return self
 end
 
@@ -130,8 +130,8 @@ function rhs_options:desc(str)
 	local desc = ""
 	if str == "" then
 		desc = str
-	elseif str == "lsp" then
-		desc = ("LSP: %s"):format(str)
+	elseif str == "trouble" then
+		desc = ("Trouble: %s"):format(str)
 	elseif str == "lsp" then
 		desc = ("DAP: %s"):format(str)
 	elseif str == "lazy" then
@@ -183,9 +183,9 @@ function pbind.lazy(cmd_string)
 end
 
 -- plugin: Trouble(folke)
-function pbind.lsp(cmd_string)
+function pbind.trouble(cmd_string)
 	local ro = rhs_options:new()
-	return ro:lsp(cmd_string)
+	return ro:trouble(cmd_string)
 end
 
 function pbind.lspsaga(cmd_string)

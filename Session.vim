@@ -13,37 +13,19 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +5 lua/modules/ui/config/noice.lua
-badd +8 lua/modules/completion/lisp.lua
+badd +10 ~/.config/wezterm/wezterm.lua
 argglobal
 %argdel
-edit lua/modules/completion/lisp.lua
-let s:save_splitbelow = &splitbelow
-let s:save_splitright = &splitright
-set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
-let &splitbelow = s:save_splitbelow
-let &splitright = s:save_splitright
-wincmd t
-let s:save_winminheight = &winminheight
-let s:save_winminwidth = &winminwidth
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-wincmd =
+$argadd ~/.config/wezterm/wezterm.lua
+edit ~/.config/wezterm/wezterm.lua
 argglobal
-balt lua/modules/ui/config/noice.lua
 let s:cpo_save=&cpo
 set cpo&vim
 inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
 xnoremap <buffer> <silent>  :lua require'nvim-treesitter.incremental_selection'.node_incremental()
 xnoremap <buffer> <silent> <nop> :lua require'nvim-treesitter.incremental_selection'.scope_incremental()
-xnoremap <buffer> <silent> <BS> :lua require'nvim-treesitter.incremental_selection'.node_decremental()
 xnoremap <buffer> <silent> <C-Bslash> :lua require'nvim-treesitter.incremental_selection'.node_incremental()
+xnoremap <buffer> <silent> <BS> :lua require'nvim-treesitter.incremental_selection'.node_decremental()
 inoremap <buffer> <config.e> l<Cmd>lua require('nvim-autopairs.fastwrap').show()
 let &cpo=s:cpo_save
 unlet s:cpo_save
@@ -102,7 +84,7 @@ setlocal formatprg=
 setlocal grepprg=
 setlocal iminsert=0
 setlocal imsearch=-1
-setlocal include=
+setlocal include=\\v<((do|load)file|require)\\s*\\(?['\"]\\zs[^'\"]+\\ze['\"]
 setlocal includeexpr=tr(v:fname,'.','/')
 setlocal indentexpr=nvim_treesitter#indent()
 setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e,0=end,0=until
@@ -135,19 +117,19 @@ setlocal rightleftcmd=search
 setlocal scrollback=-1
 setlocal noscrollbind
 setlocal scrolloff=-1
-setlocal shiftwidth=0
+setlocal shiftwidth=4
 setlocal showbreak=
 setlocal sidescrolloff=-1
 setlocal signcolumn=yes
 setlocal smartindent
-setlocal softtabstop=-1
+setlocal softtabstop=4
 setlocal nospell
 setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
 setlocal spellfile=
 setlocal spelllang=en
 setlocal spelloptions=noplainbuffer
 setlocal statuscolumn=
-setlocal statusline=%<%#lualine_c_10_command#▊\ %#lualine_c_normal#%#lualine_c_11_command#\ %#lualine_c_normal#%#lualine_c_12_command#\ \ ~/.config/nvim\ %#lualine_c_normal#%#lualine_c_filetype_DevIconLua_command#\ \ %#lualine_c_normal#%#lualine_c_normal#%#lualine_c_filename_command#\ lisp.lua\ [+]\ %#lualine_c_normal#%#lualine_c_normal#\ 2.3k\ %#lualine_c_progress_command#\ 7%%\ %#lualine_c_normal#%#lualine_c_diagnostics_hint_command#\ \ 1\ %#lualine_c_normal#%#lualine_c_normal#\ %=\ %#lualine_c_normal#%=%#lualine_x_3_command#\ utf-8\ %#lualine_c_normal#%#lualine_x_fileformat_command#\ \ %#lualine_c_normal#%#lualine_x_branch_command#\ \ main\ %#lualine_c_normal#%#lualine_x_diff_added_command#\ \ 13\ %#lualine_x_diff_modified_command#柳\ 19\ %#lualine_x_diff_removed_command#\ 30\ %#lualine_c_normal#%#lualine_x_8_command#\ LSP:\ \ %#lualine_c_normal#%#lualine_x_9_command#\ ▊
+setlocal statusline=%<%#lualine_c_2_command#▊\ %#lualine_c_normal#%#lualine_c_3_command#\ %#lualine_c_normal#%#lualine_c_4_command#\ \ ~/.config/nvim\ %#lualine_c_normal#%#lualine_c_filetype_DevIconLua_command#\ \ %#lualine_c_normal#%#lualine_c_normal#%#lualine_c_filename_command#\ wezterm.lua\ [+]\ %#lualine_c_normal#%#lualine_c_normal#\ 1.8k\ %#lualine_c_progress_command#\ 8%%\ %#lualine_c_normal#%#lualine_c_normal#\ %=\ %#lualine_c_normal#%=%#lualine_x_12_command#\ utf-8\ %#lualine_c_normal#%#lualine_x_fileformat_command#\ \ %#lualine_c_normal#%#lualine_x_17_command#\ LSP:\ \ %#lualine_c_normal#%#lualine_x_18_command#\ ▊
 setlocal suffixesadd=.lua
 setlocal noswapfile
 setlocal synmaxcol=3000
@@ -155,7 +137,7 @@ if &syntax != ''
 setlocal syntax=
 endif
 setlocal tagfunc=v:lua.vim.lsp.tagfunc
-setlocal tabstop=2
+setlocal tabstop=4
 setlocal tagcase=
 setlocal tags=
 setlocal textwidth=0
@@ -166,158 +148,19 @@ setlocal undolevels=-123456
 setlocal varsofttabstop=
 setlocal vartabstop=
 setlocal virtualedit=
-setlocal winbar=%#LspSagaWinbarFolder#\ %*%#LspSagaWinbarFolderName#completion%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFileIcon#\ %*%#LspSagaWinbarFile#lisp.lua%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFunction#\ on_attach%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFunction#\ vim.api.nvim_buf_create_user_command
+setlocal winbar=%#LspSagaWinbarFolder#\ %*%#LspSagaWinbarFolderName#wezterm%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarFileIcon#\ %*%#LspSagaWinbarFile#wezterm.lua%*%#LspSagaWinbarSep#\ %*%#LspSagaWinbarObject#\ return%#LspSagaWinbarSep#\ %*%#LspSagaWinbarNumber#\ line_height
 setlocal winblend=0
 setlocal winhighlight=
 setlocal nowinfixheight
 setlocal nowinfixwidth
 setlocal nowrap
 setlocal wrapmargin=0
-let s:l = 8 - ((7 * winheight(0) + 20) / 40)
+let s:l = 7 - ((6 * winheight(0) + 17) / 35)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 8
-normal! 07|
-wincmd w
-argglobal
-enew
-file neo-tree\ filesystem\ \[1]
-balt lua/modules/completion/lisp.lua
-let s:cpo_save=&cpo
-set cpo&vim
-inoremap <buffer> <expr> <BS> v:lua.MPairs.autopairs_bs()
-inoremap <buffer> <config.e> l<Cmd>lua require('nvim-autopairs.fastwrap').show()
-let &cpo=s:cpo_save
-unlet s:cpo_save
-setlocal keymap=
-setlocal noarabic
-setlocal autoindent
-setlocal backupcopy=
-setlocal nobinary
-setlocal nobreakindent
-setlocal breakindentopt=
-setlocal bufhidden=hide
-setlocal nobuflisted
-setlocal buftype=nofile
-setlocal nocindent
-setlocal cinkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal cinoptions=
-setlocal cinwords=if,else,while,do,for,switch
-setlocal cinscopedecls=public,protected,private
-setlocal colorcolumn=
-setlocal comments=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,fb:-
-setlocal commentstring=/*%s*/
-setlocal complete=.,w,b,u,t
-setlocal concealcursor=
-setlocal conceallevel=0
-setlocal completefunc=
-setlocal nocopyindent
-setlocal nocursorbind
-setlocal cursorcolumn
-setlocal cursorline
-setlocal cursorlineopt=line
-setlocal define=
-setlocal dictionary=
-setlocal nodiff
-setlocal equalprg=
-setlocal errorformat=
-setlocal noexpandtab
-if &filetype != 'neo-tree'
-setlocal filetype=neo-tree
-endif
-setlocal fillchars=
-setlocal fixendofline
-setlocal foldcolumn=0
-setlocal foldenable
-setlocal foldexpr=nvim_treesitter#foldexpr()
-setlocal foldignore=#
-setlocal foldlevel=99
-setlocal foldmarker={{{,}}}
-setlocal foldmethod=manual
-setlocal foldminlines=1
-setlocal foldnestmax=20
-setlocal foldtext=v:lua.require('pretty-fold').foldtext.global()
-setlocal formatexpr=
-setlocal formatoptions=tcqj
-setlocal formatlistpat=^\\s*\\d\\+[\\]:.)}\\t\ ]\\s*
-setlocal formatprg=
-setlocal grepprg=
-setlocal iminsert=0
-setlocal imsearch=-1
-setlocal include=
-setlocal includeexpr=
-setlocal indentexpr=
-setlocal indentkeys=0{,0},0),0],:,0#,!^F,o,O,e
-setlocal noinfercase
-setlocal iskeyword=@,48-57,_,192-255
-setlocal keywordprg=
-setlocal linebreak
-setlocal nolisp
-setlocal lispoptions=
-setlocal lispwords=
-setlocal nolist
-setlocal listchars=
-setlocal makeencoding=
-setlocal makeprg=
-setlocal matchpairs=(:),{:},[:]
-setlocal nomodeline
-setlocal nomodifiable
-setlocal nrformats=bin,hex
-setlocal nonumber
-setlocal numberwidth=4
-setlocal omnifunc=
-setlocal path=
-setlocal nopreserveindent
-setlocal nopreviewwindow
-setlocal quoteescape=\\
-setlocal readonly
-setlocal norelativenumber
-setlocal norightleft
-setlocal rightleftcmd=search
-setlocal scrollback=-1
-setlocal noscrollbind
-setlocal scrolloff=-1
-setlocal shiftwidth=4
-setlocal showbreak=
-setlocal sidescrolloff=-1
-setlocal signcolumn=no
-setlocal smartindent
-setlocal softtabstop=4
-setlocal nospell
-setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
-setlocal spellfile=
-setlocal spelllang=en
-setlocal spelloptions=
-setlocal statuscolumn=
-setlocal statusline=
-setlocal suffixesadd=
-setlocal noswapfile
-setlocal synmaxcol=3000
-if &syntax != 'neo-tree'
-setlocal syntax=neo-tree
-endif
-setlocal tagfunc=
-setlocal tabstop=2
-setlocal tagcase=
-setlocal tags=
-setlocal textwidth=0
-setlocal thesaurus=
-setlocal thesaurusfunc=
-setlocal undofile
-setlocal undolevels=0
-setlocal varsofttabstop=
-setlocal vartabstop=
-setlocal virtualedit=
-setlocal winbar=
-setlocal winblend=0
-setlocal winhighlight=Normal:NeoTreeNormal,NormalNC:NeoTreeNormalNC,SignColumn:NeoTreeSignColumn,CursorLine:NeoTreeCursorLine,FloatBorder:NeoTreeFloatBorder,StatusLine:NeoTreeStatusLine,StatusLineNC:NeoTreeStatusLineNC,VertSplit:NeoTreeVertSplit,EndOfBuffer:NeoTreeEndOfBuffer,WinSeparator:NeoTreeWinSeparator
-setlocal winfixheight
-setlocal winfixwidth
-setlocal nowrap
-setlocal wrapmargin=0
-wincmd w
-wincmd =
+keepjumps 7
+normal! 021|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
@@ -325,8 +168,6 @@ endif
 unlet! s:wipebuf
 set winheight=1 winwidth=20
 let &shortmess = s:shortmess_save
-let &winminheight = s:save_winminheight
-let &winminwidth = s:save_winminwidth
 let s:sx = expand("<sfile>:p:r")."x.vim"
 if filereadable(s:sx)
   exe "source " . fnameescape(s:sx)

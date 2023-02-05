@@ -47,8 +47,17 @@ return {
 
 	{
 		"norcalli/nvim-colorizer.lua",
-		event = "BufEnter",
-		opts = { "*" },
+		event = "BufReadPre",
+		opts = {
+			"*",
+			"!lazy",
+			DEFAULT_OPTIONS = {
+				names = false,
+				RRGGBBAA = true,
+				rgb_fn = true,
+				hsl_fn = true,
+			},
+		},
 	},
 
 	{
